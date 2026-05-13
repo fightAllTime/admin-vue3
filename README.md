@@ -1,5 +1,17 @@
-# Vue 3 + TypeScript + Vite
+# 一个使用豆包一步一步创建的企业级VUE项目
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 这个项目会实现的内容：
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+1. 根据豆包的指示，对Vue相关内容极其配套内容进行学习（Vue3、TS、vite、vue-router、pinia、axios等）。
+2. 完成一个完整的后台管理系统的具体代码。
+3. 在学习过程中逐渐完善注释，并对其中可以复用的代码或组件进行封装，使其成为可以真正可复用的组件。
+4. 想到什么后面会再补进来。
+
+## 未来与这个项目联动的项目
+
+1. 使用next.js等框架完善后端内容。
+2. 学习更多前端技术，不断完善这个项目的全链路。
+3. 提供给大家学习，并将部分完善该项目的skills上传，方便大家学习。
+
+
+作者：悭臾
