@@ -1,0 +1,7 @@
+body {
+    background-color: #f5f7fa;
+  /* 关键：给整个页面铺上浅灰底色 */
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  /* 统一字体 */
+  margin: 0;
+}
