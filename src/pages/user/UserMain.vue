@@ -97,8 +97,6 @@ const allUsers = reactive<UserRow[]>([
 ])
 
 const tableData = computed(() => {
-    console.log('allUsers', allUsers);
-
     const filtered = allUsers.filter(u =>
         u.userName.includes(keyword.value)
     )

@@ -39,6 +39,11 @@ const menuItems: MenuItem[] = [
         icon: Document
     },
     {
+        index: '/roleManage',
+        name: '角色管理',
+        icon: Document
+    },
+    {
         index: '/prommit',
         name: '权限管理',
         icon: Setting
