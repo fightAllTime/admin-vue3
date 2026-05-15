@@ -1,9 +1,8 @@
 <template>
     <div>
-        <el-dialog v-model="visible" title="Tips" width="500">
-            <span>新增角色</span>
+        <el-dialog v-model="visible" :title="isEdit ? '编辑角色' : '新建角色'" width="500">
             <!-- form一定要绑定ref，不然校验无法继续 -->
-            <el-form ref="formRef" :model="form" label-width="auto">
+            <el-form ref="formRef" :rules="roleAddFormRole" :model="form" label-width="auto">
                 <el-form-item label="角色名" prop="roleName">
                     <el-input v-model="form.roleName" placeholder="请输入" />
                 </el-form-item>
@@ -16,8 +15,8 @@
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button @click="visible = false">Cancel</el-button>
-                    <el-button type="primary" @click="confirmAdd(formRef)"> Confirm </el-button>
+                    <el-button @click="visible = false">取消</el-button>
+                    <el-button type="primary" @click="confirmAdd(formRef)"> {{ isEdit ? '保存' : '新建' }} </el-button>
                 </div>
             </template>
         </el-dialog>
@@ -25,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import type { RoleRow } from './api';
 import { assignForm } from '@/utils';
-import { ElMessage, type FormInstance } from 'element-plus';
+import { type FormInstance, type FormRules } from 'element-plus';
 
 // 采用Vue3给出的方法获取dialog的visible
 const visible = defineModel<boolean>()
@@ -37,6 +36,9 @@ const visible = defineModel<boolean>()
 const props = defineProps<{
     initial: RoleRow | null
 }>()
+
+// 判断是否是编辑，并改变页面部分文本
+const isEdit = computed(() => !!props.initial?.roleId)
 
 // 向父级传送参数的方法
 const emit = defineEmits<{
@@ -49,10 +51,19 @@ const form = reactive<RoleRow>({
     status: false
 })
 
+// 表单校验
+const roleAddFormRole = reactive<FormRules<RoleRow>>({
+    roleName: [
+        { required: true, message: '请输入角色名！', trigger: 'blur' }
+    ],
+    status: [
+        { required: true, message: '请选择状态！', trigger: 'change' }
+    ]
+})
+
 //重置表单并关闭,在监听内使用
 const reset = () => {
-    form.roleName = ''
-    form.status = false
+    formRef.value?.resetFields()
     visible.value = false
 }
 
@@ -72,18 +83,13 @@ const formRef = ref<FormInstance>()
 // 确认修改 如果表单内存在值，在经过校验后会传递给父组件
 const confirmAdd = async (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    await formEl.validate((valid, fields) => {
-        if (valid) {
-            emit('on-click', { ...props.initial, ...form })
-            visible.value = false
-        } else {
-            ElMessage({
-                message: '出现错误' + fields,
-                type: 'error'
-            })
+    try {
+        await formEl.validate()
+        emit('on-click', { ...props.initial, ...form })
+        visible.value = false
+    } catch {
+    }
 
-        }
-    })
 }
 </script>
 
