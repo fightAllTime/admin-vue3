@@ -7,7 +7,7 @@ import Dashboard from "@/pages/dashboard/DashBoardMain.vue";
 import Users from "@/pages/user/UserMain.vue";
 import RoleManage from "@/pages/roleManage/index.vue";
 
-import Prommit from "@/pages/prommit/PrommitMain.vue";
+import Permission from "@/pages/permission/index.vue";
 
 import System from "@/pages/system/SystemMain.vue";
 
@@ -42,7 +42,7 @@ const routes = [
         component: RoleManage,
         meta: { title: "角色管理" },
       },
-      { path: "prommit", component: Prommit, meta: { title: "权限管理" } },
+      { path: "permission", component: Permission, meta: { title: "权限管理" } },
       { path: "system", component: System, meta: { title: "系统管理" } },
     ],
   },

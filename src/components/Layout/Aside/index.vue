@@ -44,7 +44,7 @@ const menuItems: MenuItem[] = [
         icon: Document
     },
     {
-        index: '/prommit',
+        index: '/permission',
         name: '权限管理',
         icon: Setting
     },
