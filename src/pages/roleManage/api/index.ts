@@ -1,6 +1,6 @@
 type RoleRow = {
-  roleId?: string | number;
-  roleCode?: string |number;
+  roleId?: number;
+  roleCode?: number;
   roleName: string;
   status: boolean;
 };

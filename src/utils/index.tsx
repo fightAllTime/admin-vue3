@@ -1,6 +1,6 @@
 export function assignForm<T extends Record<string, any>>(
   target: T,
-  source?: Partial<T>
+  source?: Partial<T> | null
 ) {
   if (!source) return
 

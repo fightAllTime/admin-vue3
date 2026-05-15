@@ -85,7 +85,15 @@ const confirmAdd = async (formEl: FormInstance | undefined) => {
     if (!formEl) return
     try {
         await formEl.validate()
-        emit('on-click', { ...props.initial, ...form })
+        const newRow = {
+            ...props.initial,
+            ...form,
+        }
+        if (!props.initial?.roleId) {
+            newRow.roleId = Date.now()
+            newRow.roleCode = Math.floor(Math.random() * 1000)
+        }
+        emit('on-click', newRow)
         visible.value = false
     } catch {
     }

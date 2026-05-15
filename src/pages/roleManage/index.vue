@@ -33,7 +33,7 @@
                 </el-table>
 
                 <div class="pagination">
-                    <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
+                    <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :total="total"
                         :page-sizes="[10, 20, 50]" layout="total, sizes, prev, pager, next, jumper" />
                 </div>
             </el-main>
@@ -44,14 +44,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
+import type { FormInstance } from 'element-plus';
+// 引入类型
 import type { RoleRow } from './api';
+// 引入 composable
+import useRoleCrud from '@/hooks/useRoleCrud'
 // 引入新增/编辑角色页面
 import RoleAdd from './RoleAdd.vue'
-import type { FormInstance } from 'element-plus';
 
-// 表格数据进行computed时的判断依据
-const keyWord = ref<string>('')
 // 查询表单的关联字段
 const form = reactive<{ searchData: string }>({
     searchData: ''
@@ -60,90 +61,50 @@ const form = reactive<{ searchData: string }>({
 const roleManageFormRef = ref<FormInstance>()
 
 // 遍历一百个数据
-const data = new Array(100).fill(0).map((_, index) => ({
+const data: RoleRow[] = new Array(100).fill(0).map((_, index) => ({
     roleId: Date.now() + index,
     roleCode: Math.floor(Math.random() * 1000),
     roleName: `这是第${index}个角色`,
     status: index % 2 === 0
 }))
 
-//给数据进行双向数据绑定
-const allManagers = reactive<RoleRow[]>(data)
-
-// 分页（当前页数、每页数据数量）
-const pageNum = ref<number>(1)
-const pageSize = ref<number>(10)
-
-// 总数
-const total = computed(() => {
-    return allManagers.filter(m => m.roleName.includes(keyWord.value)).length
-})
-
-// 表单渲染的数据，computed自动计算
-const tableData = computed(() => {
-    //查询时过滤
-    const filteredData = allManagers.filter((m: RoleRow) =>
-        m.roleName.includes(keyWord.value)
-    )
-    // 分页
-    const start = (pageNum.value - 1) * pageSize.value
-    return filteredData.slice(start, start + pageSize.value)
-})
-
-//弹窗是否显示
-const visible = ref<boolean>(false)
-//当前行的数据 
-const currentRow = ref<RoleRow | null>(null)
+// 引入useRoleCrud
+const { currentPage, pageSize, initData, visible, currentRow, total, tableData, setKeyword, setCurrentRow, saveRow, doDeleteRow } = useRoleCrud(data, 'roleId')
 
 //新增数据，当前行没有值，调整弹窗显示
 const addTableData = () => {
-    currentRow.value = null
+    setCurrentRow(null)
     visible.value = true
 }
 
 // 调取emit的方法
 const addProps = (row: RoleRow) => {
-    // 如果传回来的数据携带roleId，则证明是编辑
-    if (row.roleId) {
-        const idx = allManagers.findIndex(m => m.roleId === row.roleId)
-        allManagers[idx] = { ...allManagers[idx], ...row }
-    } else {
-        // 否则为新增
-        allManagers.push({
-            ...row,
-            roleId: Date.now() + allManagers.length,
-            roleCode: Math.floor(Math.random() * 1000)
-        })
-    }
+    saveRow(row)
 }
 
 // 查询 
 const doSearch = () => {
-    keyWord.value = form.searchData
+    setKeyword(form.searchData)
 }
 
 // 重置
 const doReset = () => {
     roleManageFormRef.value?.resetFields()
-    keyWord.value = ''
+    setKeyword('')
 }
 
 //表格行编辑
 const doEdit = (row: RoleRow) => {
-    currentRow.value = row
+    setCurrentRow(row)
     visible.value = true
 }
 
 //改变状态
 const changeRowstatus = (row: RoleRow) => {
-    allManagers[allManagers.findIndex(m => m.roleId === row.roleId)].status = !row.status
+    initData[initData.findIndex(m => m.roleId === row.roleId)].status = !row.status
 }
 
-// 删除表格行
-const doDeleteRow = (row: RoleRow) => {
-    const start = allManagers.findIndex(m => m.roleId === row.roleId)
-    allManagers.splice(start, 1)
-}
+
 </script>
 
 <style scoped>
