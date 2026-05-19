@@ -49,7 +49,7 @@ import type { FormInstance } from 'element-plus';
 // 引入类型
 import type { RoleRow } from './api';
 // 引入 composable
-import useRoleCrud from '@/hooks/useRoleCrud'
+import useRoleCrud from '@/hooks/useGenericCom'
 // 引入新增/编辑角色页面
 import RoleAdd from './RoleAdd.vue'
 

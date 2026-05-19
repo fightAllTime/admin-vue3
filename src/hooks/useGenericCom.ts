@@ -1,6 +1,6 @@
 import { computed, reactive, ref } from "vue";
 
-const useRoleCrud = <T extends Record<string, any>>(
+const useGenericCom = <T extends Record<string, any>>(
   mockData: T[],
   keyField: keyof T,
 ) => {
@@ -64,4 +64,4 @@ const useRoleCrud = <T extends Record<string, any>>(
   };
 };
 
-export default useRoleCrud;
+export default useGenericCom;
